@@ -46,8 +46,6 @@ app.use('/api', productsRouter);
 app.use(function(req, res, next) {
     res.status(404)
     res.send('Página no encontrada')
-});  
- 
-app.listen(PORT, () => { 
-    console.log(`Servidor en http://localhost:${PORT}`)
 });
+
+export default app;
