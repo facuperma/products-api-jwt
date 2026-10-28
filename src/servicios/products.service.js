@@ -23,6 +23,14 @@ export const postProductService = async (newProduct) => {
     return await createDocument('products', newProduct);
 };
 
+export const updateProductService = async (productId, changes) => {
+    const existing = await readDocument('products', productId);
+    if (!existing) return null;
+
+    await updateDocument('products', productId, changes);
+    return { ...existing, ...changes, id: productId };
+};
+
 export const deleteProductService = async (productId) => {
     return await deleteDocument('products', productId);
 };

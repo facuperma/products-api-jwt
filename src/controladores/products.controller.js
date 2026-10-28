@@ -1,4 +1,4 @@
-import { getAllProductsByFilterService, getProductByIdService, postProductService, deleteProductService } from '../servicios/products.service.js';
+import { getAllProductsByFilterService, getProductByIdService, postProductService, updateProductService, deleteProductService } from '../servicios/products.service.js';
 
 const normalizeId = (value) => {
   if (!value) return null;
@@ -81,6 +81,30 @@ export const postProduct = async (req, res) => {
         console.error(error);
         return res.status(500).json({ message: 'Error al crear el producto' });
     }
+};
+
+export const updateProduct = async (req, res) => {
+  try {
+    const productId = normalizeId(req.params.id);
+    if (!productId) {
+      return res.status(400).json({ message: "ID de producto requerido" });
+    }
+
+    const { id, ...changes } = req.body.product ?? req.body.producto ?? req.body ?? {};
+    if (Object.keys(changes).length === 0) {
+      return res.status(400).json({ message: "No hay cambios para guardar" });
+    }
+
+    const updated = await updateProductService(productId, changes);
+    if (!updated) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+
+    return res.status(200).json({ message: "Producto actualizado", product: updated });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error al actualizar el producto" });
+  }
 };
 
 export const deleteProduct = async (req, res) => {

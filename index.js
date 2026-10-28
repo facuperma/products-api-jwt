@@ -48,4 +48,11 @@ app.use(function(req, res, next) {
     res.send('Página no encontrada')
 });
 
+// En Vercel la app se usa como función serverless; localmente levantamos el servidor.
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Servidor corriendo en http://localhost:${PORT}`)
+    })
+}
+
 export default app;
